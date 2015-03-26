@@ -8,8 +8,8 @@
     <ProjectGuid>{35738BC6-55FC-4B45-9FFC-D2B49324F189}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Updater</RootNamespace>
-    <AssemblyName>Updater</AssemblyName>
+    <RootNamespace>SimpleUpdater</RootNamespace>
+    <AssemblyName>SimpleUpdater</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
