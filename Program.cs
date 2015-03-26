@@ -101,6 +101,8 @@ namespace Updater  // Generic auto-updater.
                                 manifest[l] = "md5:" + MD5File(file);
                                 break;
                             }
+                            if (value.Trim() == "")
+                                break;
                             if (mode == 0 && MD5File(file) != value.Trim())
                             {
                                 Console.WriteLine("Updating " + file + "...");
