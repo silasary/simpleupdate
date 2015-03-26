@@ -23,7 +23,14 @@ namespace Updater  // Generic auto-updater.
             string[] manifests = Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.updatemanifest",SearchOption.AllDirectories);
             if (manifests.Length == 0)
             {
-                MessageBox.Show("Update Manifest not found.");
+                try
+                {
+                    MessageBox.Show("Update Manifest not found.");
+                }
+                catch (TypeInitializationException)
+                {
+                    Console.WriteLine("Update Manifest not found.");
+                }
                 return;
             }
             
