@@ -139,7 +139,8 @@ namespace Updater  // Generic auto-updater.
                             }
                             break;
                         case ("launch"):
-                            Process.Start(value.Trim());
+                            if (!Generate)
+                                Process.Start(value.Trim());
                             break;
                     }
                 }
