@@ -57,7 +57,8 @@ namespace Updater  // Generic auto-updater.
                             {
                                 try
                                 {
-                                    client.DownloadFile(value, Path.GetFileName(file));
+                                    var newmanifest = client.DownloadString(value);
+                                    File.WriteAllText(Path.GetFileName(file), newmanifest);
                                 }
 
                                 catch (WebException v)
