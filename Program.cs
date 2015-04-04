@@ -102,6 +102,9 @@ namespace Updater  // Generic auto-updater.
                         case ("address"):
                             address = value.Trim();
                             break;
+                        case "baseaddress":
+                            client.BaseAddress = value.Trim();
+                            break;
                         case ("md5"):
                             if (Generate)
                             {
@@ -151,6 +154,12 @@ namespace Updater  // Generic auto-updater.
 
         private static void DownloadFile(string address, string file)
         {
+            if (string.IsNullOrEmpty(address) && string.IsNullOrEmpty(file))
+                return;
+            else if (string.IsNullOrEmpty(address))
+                address = file;
+            else if (string.IsNullOrEmpty(file))
+                file = Path.GetDirectoryName(address);
             try
             {
                 client.DownloadFile(address, file);
