@@ -57,8 +57,18 @@ namespace Updater  // Generic auto-updater.
                             {
                                 try
                                 {
-                                    var newmanifest = client.DownloadString(value);
-                                    File.WriteAllText(Path.GetFileName(file), newmanifest);
+                                    var req = WebRequest.Create(value);
+                                    var res = (HttpWebResponse)req.GetResponse();
+                                    var LastModified = res.LastModified;
+                                    var diff = LastModified.Subtract(new FileInfo(Path.GetFileName(file)).LastWriteTime).TotalMinutes;
+                                    if (diff > 0)
+                                    {
+                                        var newmanifest = client.DownloadString(value);
+                                        File.WriteAllText(Path.GetFileName(file), newmanifest);
+                                        downloaded = true;
+                                        l = 0;
+                                        manifest = File.ReadAllLines(Path.GetFileName(file));
+                                    }
                                 }
 
                                 catch (WebException v)
@@ -92,9 +102,7 @@ namespace Updater  // Generic auto-updater.
                                     }
                                 }
 
-                                downloaded = true;
-                                l = 0;
-                                manifest = File.ReadAllLines(Path.GetFileName(file));
+                                
                             }
                             break;
                         case ("file"):
