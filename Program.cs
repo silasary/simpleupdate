@@ -60,6 +60,7 @@ namespace Updater  // Generic auto-updater.
                                     var req = WebRequest.Create(value);
                                     var res = (HttpWebResponse)req.GetResponse();
                                     var LastModified = res.LastModified;
+                                    res.Close();
                                     var diff = LastModified.Subtract(new FileInfo(Path.GetFileName(file)).LastWriteTime).TotalMinutes;
                                     if (diff > 0)
                                     {
