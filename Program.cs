@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Updater  // Generic auto-updater.
@@ -158,6 +159,10 @@ namespace Updater  // Generic auto-updater.
                         case ("launch_wait"):
                             if (!Generate)
                                 Process.Start(value.Trim()).WaitForExit();
+                            break;
+                        case "wait_close":
+                            while (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(value.Trim())).Count() > 0)
+                                Thread.Sleep(1000);
                             break;
                     }
                 }
