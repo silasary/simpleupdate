@@ -155,6 +155,10 @@ namespace Updater  // Generic auto-updater.
                             if (!Generate)
                                 Process.Start(value.Trim());
                             break;
+                        case ("launch_wait"):
+                            if (!Generate)
+                                Process.Start(value.Trim()).WaitForExit();
+                            break;
                     }
                 }
                 if (Generate)
