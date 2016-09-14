@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -24,15 +25,23 @@ namespace Updater  // Generic auto-updater.
             string[] manifests = Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.updatemanifest",SearchOption.AllDirectories);
             if (manifests.Length == 0)
             {
-                try
+                if (Generate)
                 {
-                    MessageBox.Show("Update Manifest not found.");
+                    CreateNewManifest();
                 }
-                catch (TypeInitializationException)
+                else
                 {
-                    Console.WriteLine("Update Manifest not found.");
+
+                    try
+                    {
+                        MessageBox.Show("Update Manifest not found.");
+                    }
+                    catch (TypeInitializationException)
+                    {
+                        Console.WriteLine("Update Manifest not found.");
+                    }
+                    return;
                 }
-                return;
             }
             
             for (int i = 0; i < manifests.Length; i++)
@@ -54,6 +63,8 @@ namespace Updater  // Generic auto-updater.
                     switch (key.ToLowerInvariant())
                     {
                         case ("manifest"):
+                            if (string.IsNullOrEmpty(value))
+                                continue;
                             if (!Generate && !downloaded) // Download the latest version of the manifest, and start from the top.
                             {
                                 try
@@ -169,6 +180,22 @@ namespace Updater  // Generic auto-updater.
                 if (Generate)
                     File.WriteAllLines(manifests[i], manifest);
             }
+        }
+
+        private static void CreateNewManifest()
+        {
+            var name = Directory.GetFiles(".","*.exe").FirstOrDefault();
+            name = Path.GetFileNameWithoutExtension(name);
+            var manifest = new StringBuilder();
+            manifest.AppendLine("manifest:");
+            manifest.AppendLine("baseaddress:");
+            foreach (var file in Directory.GetFiles("."))
+            {
+                manifest.AppendLine($"file:{Path.GetFileName(file)}");
+                manifest.AppendLine("md5:");
+            }
+
+            File.WriteAllText(name + ".updatemanifest", manifest.ToString());
         }
 
         private static void DownloadFile(string address, string file)
